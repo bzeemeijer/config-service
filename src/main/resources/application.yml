@@ -1,6 +1,8 @@
 server:
   port: 8888
 spring:
+  application:
+    name: config-service
   cloud:
     config:
       server:
@@ -8,3 +10,27 @@ spring:
           uri: https://github.com/bzeemeijer/config-repo
           search-paths:
           - '{application}'
+  security:
+    user:
+      name: dev
+      password: dev
+eureka:
+  instance:
+    leaseRenewalIntervalInSeconds: 10
+    health-check-url-path: /actuator/health
+    metadata-map:
+      user.name: dev  
+      user.password: dev
+  client:
+    registryFetchIntervalSeconds: 5
+    serviceUrl:
+      defaultZone: http://${spring.security.user.name}:${spring.security.user.password}@localhost:8761/eureka/
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"          
+logging:
+  file: ${spring.application.name}.log
+
+          
